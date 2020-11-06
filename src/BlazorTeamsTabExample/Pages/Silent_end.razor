@@ -1,0 +1,26 @@
+﻿@page "/silent-end"
+
+<ClientScript>
+    <script>
+        microsoftTeams.initialize();
+        // ADAL.js configuration
+        let config = {
+            clientId: "dd5cf059-1957-4a5d-beec-7e70f57760f5",
+            redirectUri: "https://19053e3e1bb7.ngrok.io/silent-end",       // This should be in the list of redirect uris for the AAD app
+            cacheLocation: "localStorage",
+            navigateToLoginRequestUrl: false,
+        };
+        let authContext = new AuthenticationContext(config);
+        if (authContext.isCallback(window.location.hash)) {
+            authContext.handleWindowCallback(window.location.hash);
+            // Only call notifySuccess or notifyFailure if this page is in the authentication popup (not iframed)
+            if (window.parent === window) {
+                if (authContext.getCachedUser()) {
+                    microsoftTeams.authentication.notifySuccess();
+                } else {
+                    microsoftTeams.authentication.notifyFailure(authContext.getLoginError());
+                }
+            }
+        }
+    </script>
+</ClientScript>

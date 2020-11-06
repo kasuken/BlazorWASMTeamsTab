@@ -1,0 +1,97 @@
+﻿@page "/graph-test"
+
+@inject IJSRuntime jsRuntime
+@inject ILocalStorageService localStorage
+@inject GraphService graphService
+
+<h3>Let's connect</h3>
+<div>Dear APIs, I'm going to ask questions. I want them answered immediately!</div>
+
+<h4 style="margin-top:15px">Some sample calls</h4>
+
+<input type="button" value="Get Teams Context" @onclick="GetTeamsContext" />
+<input type="button" value="Me call" @onclick="GraphTestCall" />
+<input type="button" value="Read All Groups call" @onclick="GetAllTeams" />
+<input type="button" value="Clear" @onclick="ClearPanel" />
+
+<p>@_messageText</p>
+
+@if (_groups != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>DisplayName</th>
+                <th>Id</th>
+                <th>Created</th>
+                <th>Mail</th>
+                <th>Visibility</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var group in _groups)
+            {
+                <tr>
+                    <td>@group.DisplayName</td>
+                    <td>@group.Id</td>
+                    <td>@group.CreatedDateTime</td>
+                    <td>@group.Mail</td>
+                    <td>@group.Visibility</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    string _messageText = "";
+    string _bearerToken = "";
+    System.Collections.Generic.List<BlazorTeamsTabExample.Models.Group> _groups = null;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (_bearerToken == "")
+            GetBearerToken();
+
+        base.OnAfterRender(firstRender);
+    }
+
+    protected async Task GetTeamsContext()
+    {
+        var teamsContextJson = await localStorage.GetItemAsync<Object>("teamsContext_");
+
+        _messageText = teamsContextJson.ToString();
+    }
+
+    protected async Task GraphTestCall()
+    {
+        _messageText = await graphService.GetMeWithHttpClient(_bearerToken);
+    }
+
+    protected async Task GetAllTeams()
+    {
+        _groups = await graphService.GetAllEntities<BlazorTeamsTabExample.Models.Group>("groups", _bearerToken);
+    }
+
+    protected async void GetBearerToken()
+    {
+        _bearerToken = await localStorage.GetItemAsync<string>("adal.accesstoken_");
+    }
+
+    protected void ClearPanel()
+    {
+        _messageText = "";
+        _groups = null;
+    }
+
+    private async Task ShowAlert(String msg)
+    {
+        await jsRuntime.InvokeAsync<object>("ShowAlert", msg);
+    }
+}

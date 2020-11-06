@@ -1,0 +1,45 @@
+{
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.6/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.6",
+  "version": "1.0.0",
+  "showLoadingIndicator": false,
+  "id": "668e5365-1f50-40e2-ac2e-9d2c80652c51",
+  "packageName": "xi.blazorteamsexample",
+  "developer": {
+    "name": "Experts Inside",
+    "websiteUrl": "https://www.expertsinside.com",
+    "privacyUrl": "https://www.expertsinside.com",
+    "termsOfUseUrl": "https://www.expertsinside.com"
+  },
+  "icons": {
+    "color": "color.png",
+    "outline": "outline.png"
+  },
+  "name": {
+    "short": "BlazorTeams Example",
+    "full": "Blazor power for Teams"
+  },
+  "description": {
+    "short": "...",
+    "full": "..."
+  },
+  "accentColor": "#FFFFFF",
+  "staticTabs": [
+    {
+      "entityId": "10001",
+      "name": "Home",
+      "contentUrl": "https://19053e3e1bb7.ngrok.io/?name={loginHint}&tenant={tid}&group={groupId}&theme={theme}",
+      "websiteUrl": "https://19053e3e1bb7.ngrok.io/",
+      "scopes": [
+        "personal"
+      ]
+    }
+  ],
+  "permissions": [
+    "identity",
+    "messageTeamMembers"
+  ],
+  "validDomains": [
+    "19053e3e1bb7.ngrok.io"
+  ]
+}
